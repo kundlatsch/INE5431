@@ -41,13 +41,22 @@ public class ImageApp   {
 		return img;
 	}
 	
-	public static BufferedImage criaImagemCinza() {
-		BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_BYTE_GRAY);
+	public static BufferedImage criaImagemCinza(BufferedImage bufferedImage) {
+		int width = bufferedImage.getWidth();
+		int height = bufferedImage.getHeight();
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
 		WritableRaster raster = img.getRaster();
-		for(int h=0;h<img.getHeight();h++) //Percorre a horizontal
-			for(int w=0;w<img.getWidth();w++) {//Percorre a vertical
-				raster.setSample(w,h,0,h);//como o h = 0 e vai aumentando, cada linha vai ficando mais clara
+
+		for(int h = 0; h < height; h++) {
+			for(int w = 0; w < width; w++) {
+				int rgb = bufferedImage.getRGB(w, h);
+				int r = (int)((rgb&0x00FF0000)>>>16);
+				int g = (int)((rgb&0x0000FF00)>>>8);
+				int b = (int)(rgb&0x000000FF);
+				double y = (0.3*r) + (0.59*g) + (0.11*b); 
+				raster.setSample(w, h, 0, y);
 			}
+		}
 		return img;
 	}
 	
@@ -76,15 +85,23 @@ public class ImageApp   {
 			}
 	}
 
+	public static BufferedImage reduzirResolucao(BufferedImage img, int proporcao) {
+		int newWidth = img.getWidth() / proporcao;
+		int newHeight = img.getHeight() / proporcao;
+		return null;
+	}
+
 	public static void main(String[] args) {
 		ImageApp ia = new ImageApp();
 		BufferedImage imgJPEG = loadImage("https://www.inf.ufsc.br/~roberto.willrich/INE5431/circle.png");
-		BufferedImage imgRGB = criaImagemRGB();
-		BufferedImage imgCinza = criaImagemCinza();
+
+		// Questão 1
+		// BufferedImage imgReduzida = reduzirResolucao(imgJPEG, 4);
+
+		BufferedImage imgCinza = criaImagemCinza(imgJPEG);
 		BufferedImage imgBinaria = criaImagemBinaria();
 
 		ia.apresentaImagem(new JFrame("imgJPEG"), imgJPEG);
-		ia.apresentaImagem(new JFrame("imgRGB"), imgRGB);
 		ia.apresentaImagem(new JFrame("imgCinza"), imgCinza);
 		ia.apresentaImagem(new JFrame("imgBinaria"), imgBinaria);
 
