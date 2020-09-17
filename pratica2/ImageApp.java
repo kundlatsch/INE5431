@@ -60,15 +60,24 @@ public class ImageApp   {
 		return img;
 	}
 	
-	public static BufferedImage criaImagemBinaria() {
-		BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_BYTE_BINARY);
+	public static BufferedImage criaImagemBinaria(BufferedImage bufferedImage) {
+		int width = bufferedImage.getWidth();
+		int height = bufferedImage.getHeight();
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
 		WritableRaster raster = img.getRaster();
-		for(int h=0;h<img.getHeight();h++) //Percorre a horizontal
-			for(int w=0;w<img.getWidth();w++) {//Percorre a vertical
-				if (((h/50)+(w/50)) % 2 == 0) 
-					raster.setSample(w,h,0,0); // checkerboard pattern.
-				else raster.setSample(w,h,0,1); 
+		WritableRaster rasterPB = bufferedImage.getRaster();
+
+		for(int h = 0; h < height; h++) {
+			for(int w = 0; w < width; w++) {
+				int[] p = new int[1];
+				rasterPB.getPixel(w, h, p);
+				if(p[0] > 127) {
+					raster.setSample(w, h, 0, 1);
+				} else {
+					raster.setSample(w, h, 0, 0);
+				}
 			}
+		}
 		return img;
 	}
 	
@@ -93,13 +102,22 @@ public class ImageApp   {
 
 	public static void main(String[] args) {
 		ImageApp ia = new ImageApp();
+		// Required image: https://www.inf.ufsc.br/~roberto.willrich/INE5431/circle.png
+		// Alternative image: http://www.inf.ufsc.br/~roberto.willrich/INE5431/peixe.png
 		BufferedImage imgJPEG = loadImage("https://www.inf.ufsc.br/~roberto.willrich/INE5431/circle.png");
 
 		// Questão 1
+		// TODO: concluir o método utilizado abaixo
 		// BufferedImage imgReduzida = reduzirResolucao(imgJPEG, 4);
 
+		// Questão 2
 		BufferedImage imgCinza = criaImagemCinza(imgJPEG);
-		BufferedImage imgBinaria = criaImagemBinaria();
+		
+		// Questão 3
+		BufferedImage imgBinaria = criaImagemBinaria(imgCinza);
+
+		// Questão 4
+		// TODO: split RGB
 
 		ia.apresentaImagem(new JFrame("imgJPEG"), imgJPEG);
 		ia.apresentaImagem(new JFrame("imgCinza"), imgCinza);
