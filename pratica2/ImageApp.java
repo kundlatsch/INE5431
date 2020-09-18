@@ -120,10 +120,54 @@ public class ImageApp   {
 			}
 	}
 
+	private static int[] getMean(int pixels[]) {
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		int n = 0;
+		for (int i=0; i<pixels.length; i++) {
+			// if (pixels[i] != null) {
+			r += (int)((pixels[i]&0x00FF0000)>>>16); // componente vermelho
+			g += (int)((pixels[i]&0x0000FF00)>>>8); // componente verde
+			b += (int)(pixels[i]&0x000000FF); //componente azul
+			n++;
+			// }
+		}
+		r /= n;
+		g /= n;
+		b /= n;
+
+		return new int[]{r,g,b};
+	}
+
 	public static BufferedImage reduzirResolucao(BufferedImage img, int proporcao) {
 		int newWidth = img.getWidth() / proporcao;
 		int newHeight = img.getHeight() / proporcao;
-		return null;
+
+		BufferedImage smallImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+
+		WritableRaster raster = smallImg.getRaster();
+
+		for(int h=0; h<img.getHeight(); h+=proporcao) {
+			for(int w=0; w<img.getWidth(); w+=proporcao) {
+				int k = 0;
+				int pixels[] = new int[proporcao*proporcao];
+				for(int i=h; i<h+proporcao; i++){
+					for(int j=w; j<w+proporcao; j++){
+						pixels[k] = img.getRGB(j,i);
+						k++;
+					}
+				}
+				int[] rgb = getMean(pixels);
+				int w2 = w / proporcao;
+				int h2 = h / proporcao;
+				raster.setSample(w2,h2,0,rgb[0]); // Componente Vermelho
+				raster.setSample(w2,h2,1,rgb[1]); // Componente Verde
+				raster.setSample(w2,h2,2,rgb[2]);  // Componente Azul
+			}
+		}
+
+		return smallImg;
 	}
 
 	public static void main(String[] args) {
@@ -134,7 +178,7 @@ public class ImageApp   {
 
 		// Questão 1
 		// TODO: concluir o método utilizado abaixo
-		// BufferedImage imgReduzida = reduzirResolucao(imgJPEG, 4);
+		BufferedImage imgReduzida = reduzirResolucao(imgJPEG, 4);
 
 		// Questão 2
 		BufferedImage imgCinza = criaImagemCinza(imgJPEG);
@@ -145,7 +189,14 @@ public class ImageApp   {
 		// Questão 4
 		BufferedImage[] imgSplitRGB = criaImagemSplitRGB(imgJPEG);
 
+		System.out.println(imgJPEG.getWidth());
+		System.out.println(imgJPEG.getHeight());
+
+		System.out.println(imgReduzida.getWidth());
+		System.out.println(imgReduzida.getHeight());
+
 		ia.apresentaImagem(new JFrame("imgJPEG"), imgJPEG);
+		ia.apresentaImagem(new JFrame("imgReduzida"), imgReduzida);
 		ia.apresentaImagem(new JFrame("imgCinza"), imgCinza);
 		ia.apresentaImagem(new JFrame("imgBinaria"), imgBinaria);
 
@@ -168,6 +219,6 @@ public class ImageApp   {
 			ia.apresentaImagem(new JFrame(title), imgSplitRGB[i]);
 		}
 
-		imprimePixeis(imgJPEG);
+		// imprimePixeis(imgJPEG);
 	}
 }
