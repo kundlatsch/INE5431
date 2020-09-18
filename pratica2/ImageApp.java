@@ -53,13 +53,39 @@ public class ImageApp   {
 				int r = (int)((rgb&0x00FF0000)>>>16);
 				int g = (int)((rgb&0x0000FF00)>>>8);
 				int b = (int)(rgb&0x000000FF);
-				double y = (0.3*r) + (0.59*g) + (0.11*b); 
+				double y = calcularLumiancia(r,g,b);
 				raster.setSample(w, h, 0, y);
 			}
 		}
 		return img;
 	}
-	
+
+	private static double calcularLumiancia(int r, int g, int b) {
+		return (0.3*r) + (0.59*g) + (0.11*b);
+	}
+
+	public static BufferedImage[] criaImagemSplitRGB(BufferedImage bufferedImage) {
+		int width = bufferedImage.getWidth();
+		int height = bufferedImage.getHeight();
+		BufferedImage[] img = new BufferedImage[3];
+		for(int i = 0; i < 3; i++) {
+			img[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			WritableRaster raster = img[i].getRaster();
+
+			for (int h = 0; h < height; h++) {
+				for (int w = 0; w < width; w++) {
+					int rgb = bufferedImage.getRGB(w, h);
+					int r = (int) ((rgb & 0x00FF0000) >>> 16);
+					int g = (int) ((rgb & 0x0000FF00) >>> 8);
+					int b = (int) (rgb & 0x000000FF);
+					double y = calcularLumiancia(r, g, b);
+					raster.setSample(w, h, i, y);
+				}
+			}
+		}
+		return img;
+	}
+
 	public static BufferedImage criaImagemBinaria(BufferedImage bufferedImage) {
 		int width = bufferedImage.getWidth();
 		int height = bufferedImage.getHeight();
@@ -117,11 +143,30 @@ public class ImageApp   {
 		BufferedImage imgBinaria = criaImagemBinaria(imgCinza);
 
 		// Questão 4
-		// TODO: split RGB
+		BufferedImage[] imgSplitRGB = criaImagemSplitRGB(imgJPEG);
 
 		ia.apresentaImagem(new JFrame("imgJPEG"), imgJPEG);
 		ia.apresentaImagem(new JFrame("imgCinza"), imgCinza);
 		ia.apresentaImagem(new JFrame("imgBinaria"), imgBinaria);
+
+		// Printa as 3 imagens do SplitRGB
+		for(int i = 0; i < 3; i++){
+			String title = "img";
+			switch (i){
+				case 0:
+					title += "SplitRed";
+					break;
+				case 1:
+					title += "SplitGreen";
+					break;
+
+				case 2:
+					title += "SplitBlue";
+					break;
+			}
+
+			ia.apresentaImagem(new JFrame(title), imgSplitRGB[i]);
+		}
 
 		imprimePixeis(imgJPEG);
 	}
