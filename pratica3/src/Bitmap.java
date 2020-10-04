@@ -244,9 +244,9 @@ public class Bitmap {
    	 	int k=offset_to_start_image;
    	 	for (int i=0; i<height; i++){
 	 		for (int j=0; j<width; j++){
-	 			bitmapfile[k++] = (byte)raster[i][j][0]; // escreve componente R
+	 			bitmapfile[k++] = (byte)raster[i][j][2]; // escreve componente R
 	 		 	bitmapfile[k++] = (byte)raster[i][j][1]; // escreve componente G
-	 		 	bitmapfile[k++] = (byte)raster[i][j][2]; // escreve componente B
+	 		 	bitmapfile[k++] = (byte)raster[i][j][0]; // escreve componente B
 
 	 		}
 	 	}
