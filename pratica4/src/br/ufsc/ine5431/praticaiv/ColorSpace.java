@@ -12,15 +12,26 @@ public class ColorSpace {
 		return (int)(value*255);
 	}
 	
-	public static double[] rgb_to_ycbcr_base_double(double r, double g, double b) {   
+	public static double[] rgb_to_ycbcr_base_double(double r, double g, double b) {
+
+		double Ey, Er, Eb;
+
+		Ey = 0.299*r + 0.587*g + 0.144*b;
+		Er = 0.701*r - 0.587*g - 0.114*b;
+		Eb = -.299*r - 0.587*g + 0.886*b;
+
+		double Cr, Cb;
+
+		Cr = Er / 1.402;
+		Cb = Eb / 1.772;
 
 		double ycbcr[] = new double[3];
-		ycbcr[0] = r;
-		ycbcr[1] = g;
-		ycbcr[2] = b;
-		
-		/** 
-			TODO!
+
+		ycbcr[0] = Ey;
+		ycbcr[1] = Cb;
+		ycbcr[2] = Cr;
+
+		/**
 			Modifiquem o código acima para fazer a conversão corretamente!
 			PS: sugiro que não se basear na conversão inversa que está otimizada... 
 			Sigam a especificação do documento BT.601

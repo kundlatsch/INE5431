@@ -128,13 +128,13 @@ public class Bitmap {
    		
    		// Geração do Raster RGB e escrita do raster no array representando arquivo BMP
    	 	int k=offset_to_start_image;
-   	 	for (int i=height-1; i>=0; i--){
-	 		for (int j=width-1; j>=0; j--){	 			
+   	 	for (int i=0; i< height; i++){
+	 		for (int j=0; j< width; j++){
    	 			// conversão YCbCr to RGB
    	 			raster[i][j] = ColorSpace.bt601_ycbcr_to_rgb(ycbcr[i][j][0], ycbcr[i][j][1], ycbcr[i][j][2]);
-	 			bitmapfile[k++] = (byte)raster[i][j][0];
+	 			bitmapfile[k++] = (byte)raster[i][j][2];
 	 		 	bitmapfile[k++] = (byte)raster[i][j][1]; 
-	 		 	bitmapfile[k++] = (byte)raster[i][j][2];
+	 		 	bitmapfile[k++] = (byte)raster[i][j][0];
    	 		}
    	 	}
    	}
