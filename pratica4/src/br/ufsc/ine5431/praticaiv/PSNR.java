@@ -30,27 +30,40 @@ public final class PSNR {
 	}
 
 	 private static double psnr(int[][][] original, int[][][] decodificado, int bpp) {
-		 /* TODO
+		 /*
 	    	 * Implemente o cálculo do PSNR
 	    	 */
-	    	return mse(original,decodificado);	    
+
+		 double logaritmando = Math.pow((Math.pow(2,bpp) - 1) / mse(original, decodificado),2);
+
+		 double result = 10 * Math.log10(logaritmando);
+
+		 return result;
 	  }
 	 
 	 private static double mse(int[][][] original, int[][][] decodificado)  {
-		 /* TODO
+		 /*
 		  * Implemente aqui o cálculo do MSE. Dica: não esqueça de aplicar o cast (double) e divisões de números inteiros
 		  */
+
 		 int nlinhas = original[0].length;
 		 int ncolunas = original.length;
+
+		 double sum = 0.0;
+		 double n = nlinhas * ncolunas * 3.0;
+
 		 for (int i=0;i<nlinhas;i++) {  //percorre linhas
 			 for (int j=0;j<ncolunas;j++) {  //percorre colunas
 				 for (int p=0;p<3;p++) {  //percorre componentes R, G e B
 					 System.out.println("Original Componente [" +p+ "] em [" +i+","+j+"]:"+original[i][j][p]);
 					 System.out.println("Decodificado Componente ["+p+"] em ["+i+","+j+"]:"+decodificado[i][j][p]);
-				 } 
+					 sum += Math.pow(original[i][j][p] - decodificado[i][j][p],2);
+				 }
 			 }
-		 } 
-		 return 1;	 
+		 }
+
+
+		 return sum/n;
 	}
 
 }
