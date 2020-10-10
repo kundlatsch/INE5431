@@ -132,9 +132,9 @@ public class Bitmap {
 	 		for (int j=width-1; j>=0; j--){	 			
    	 			// conversão YCbCr to RGB
    	 			raster[i][j] = ColorSpace.bt601_ycbcr_to_rgb(ycbcr[i][j][0], ycbcr[i][j][1], ycbcr[i][j][2]);
-	 			bitmapfile[k++] = (byte)raster[i][j][2];
+	 			bitmapfile[k++] = (byte)raster[i][j][0];
 	 		 	bitmapfile[k++] = (byte)raster[i][j][1]; 
-	 		 	bitmapfile[k++] = (byte)raster[i][j][0];
+	 		 	bitmapfile[k++] = (byte)raster[i][j][2];
    	 		}
    	 	}
    	}
@@ -200,11 +200,11 @@ public class Bitmap {
    	 	
    	 // Escrita do Raster no array de bytes representando arquivo BMP
    	  int k=offset_to_start_image;
-   	  for (int i=height-1; i>=0; i--){   		  
+   	  for (int i=0; i < height; i++){
  	 		for (int j=0; j<width; j++){
-   		 	    bitmapfile[k++] = (byte)raster[i][j][0];  // Escreve B
+   		 	    bitmapfile[k++] = (byte)raster[i][j][2];  // Escreve B
    		 		bitmapfile[k++] = (byte)raster[i][j][1];  // Escreve G
-   		 		bitmapfile[k++] = (byte)raster[i][j][2];  // Escreve R
+   		 		bitmapfile[k++] = (byte)raster[i][j][0];  // Escreve R
    		 	}
    	    }
     }
