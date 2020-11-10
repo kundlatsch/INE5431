@@ -24,12 +24,16 @@
 			<descriptor explicitDur="10s" id="Di1" region="Ri">
 			</descriptor>
 			<descriptor explicitDur="8s" id="Dt1" region="Rt">
+				<descriptorParam name="fit" value="fill"/>
+				<descriptorParam name="fontColor" value="white"/>
 			</descriptor>
 			<descriptor explicitDur="10s" id="Dv2" region="Rv">
 			</descriptor>
 			<descriptor explicitDur="10s" id="Di2" region="Ri">
 			</descriptor>
 			<descriptor explicitDur="10s" id="Dt2" region="Rt">
+				<descriptorParam name="fit" value="fill"/>
+				<descriptorParam name="fontColor" value="white"/>
 			</descriptor>
 			<descriptor explicitDur="10s" id="Da1">
 			</descriptor>
